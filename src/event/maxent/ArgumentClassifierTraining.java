@@ -10,15 +10,12 @@ import java.util.Map;
 
 import org.dom4j.DocumentException;
 
-import util.Controller;
-
-import commons.Alphabets;
-
-import ace.acetypes.AceMention;
-
 import cc.mallet.classify.Classifier;
 import cc.mallet.classify.MaxEnt;
+import ace.acetypes.AceMention;
+import commons.Alphabets;
 import event.perceptron.featureGenerator.EdgeFeatureGenerator;
+import util.Controller;
 import event.types.SentenceAssignment;
 import event.types.SentenceInstance;
 
@@ -27,7 +24,7 @@ public class ArgumentClassifierTraining extends TriggerClassifierTraining
 	
 	public ArgumentClassifierTraining()
 	{
-		featTableFileName = "tmp/FeatureTableArg";
+		featTableFileName = "Temp/FeatureTableArg";
 	}
 	
 	protected void printFeatureTableToFile(File srcDir, File trainingFileList, Controller controller)
