@@ -25,7 +25,7 @@ public class Controller implements java.io.Serializable
 	
 	// event specific arguments
 
-	public Boolean skipNonEventSent = false; //cyd
+	public Boolean skipNonEventSent = true; 
 	// whether use crossSent inference 
 	public Boolean crossSent = false;
 	// whether use BeamSearchCluster or BeamSearchClusterSeq

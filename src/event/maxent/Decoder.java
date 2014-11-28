@@ -36,59 +36,78 @@ import event.types.SentenceInstance.InstanceAnnotations;
  */
 public class Decoder extends event.perceptron.core.Decoder
 {
-	private static List<SentenceAssignment> decoding(
-			List<SentenceInstance> instanceList, MaxEntDecoder triggerClassifier, MaxEntDecoder argClassifier)
+	public static List<SentenceAssignment> decoding(
+			List<SentenceInstance> instanceList,
+			MaxEntDecoder triggerClassifier, MaxEntDecoder argClassifier)
 	{
 		List<SentenceAssignment> ret = new ArrayList<SentenceAssignment>();
-		for(SentenceInstance inst : instanceList)
+		for (SentenceInstance inst : instanceList)
 		{
-			SentenceAssignment assn = new SentenceAssignment(inst.alphabets, inst.controller);
+			SentenceAssignment assn = new SentenceAssignment(inst.alphabets,
+					inst.controller);
 			ret.add(assn);
-			
+
 			// skip tokens with forbidden POS later
-			for(int i=0; i<inst.size(); i++)
+			for (int i = 0; i < inst.size(); i++)
 			{
 				// get feature vector for the trigger candidate
-				StringBuilder featureVector = new StringBuilder("trigger" + " " + SentenceAssignment.Default_Trigger_Label);
-				List<String> features = ((List<List<String>>) inst.get(InstanceAnnotations.NodeTextFeatureVectors)).get(i);
-				for(String feature : features)
+				StringBuilder featureVector = new StringBuilder("trigger" + " "
+						+ SentenceAssignment.Default_Trigger_Label);
+				List<String> features = ((List<List<String>>) inst
+						.get(InstanceAnnotations.NodeTextFeatureVectors))
+						.get(i);
+				for (String feature : features)
 				{
 					featureVector.append(" ");
 					featureVector.append(feature + ":1");
 				}
 				// predict trigger type
-				String triggerLabel = triggerClassifier.decodeOnFeatureVector(featureVector.toString());
+				String triggerLabel = triggerClassifier
+						.decodeOnFeatureVector(featureVector.toString());
 				// set trigger type in assn
 				assn.incrementState();
 				assn.setCurrentNodeLabel(triggerLabel);
-				
-				if(!triggerLabel.equals(SentenceAssignment.Default_Trigger_Label))
+
+				if (!triggerLabel
+						.equals(SentenceAssignment.Default_Trigger_Label))
 				{
-					for(int k=0; k<inst.eventArgCandidates.size(); k++)
+					for (int k = 0; k < inst.eventArgCandidates.size(); k++)
 					{
 						AceMention mention = inst.eventArgCandidates.get(k);
 						// predict argument type
-						featureVector = new StringBuilder("arg" + " " + SentenceAssignment.Default_Argument_Label);
-						features = EdgeFeatureGenerator.get_edge_text_features(inst, i, mention);
-						for(String feature : features)
+						featureVector = new StringBuilder("arg" + " "
+								+ SentenceAssignment.Default_Argument_Label);
+						features = EdgeFeatureGenerator.get_edge_text_features(
+								inst, i, mention);
+						for (String feature : features)
 						{
 							featureVector.append(" ");
 							featureVector.append(feature + ":1");
 						}
 						// predict argument role
-						String argRole = argClassifier.decodeOnFeatureVector(featureVector.toString());
-						// set arg role in assn
-						assn.setCurrentEdgeLabel(k, argRole);
+//						try
+//						{
+							String argRole = argClassifier
+									.decodeOnFeatureVector(featureVector
+											.toString());
+							// set arg role in assn
+							assn.setCurrentEdgeLabel(k, argRole);
+//						}
+//						catch (IllegalArgumentException ee)
+//						{
+//							continue;
+//						}
 					}
 				}
 			}
 		}
 		return ret;
 	}
-	
-	static public void main(String[] args) throws IOException, DocumentException
+
+	static public void main(String[] args) throws IOException,
+			DocumentException
 	{
-		if(args.length < 5)
+		if (args.length < 5)
 		{
 			System.out.println("Usage:");
 			System.out.println("args[0]: trigger classifier");
@@ -98,59 +117,63 @@ public class Decoder extends event.perceptron.core.Decoder
 			System.out.println("args[4]: output dir");
 			System.exit(-1);
 		}
-		
+
 		// read Classifier models
-		MaxEntDecoder triggerClassifier = new MaxEntDecoder(new File(args[0]), "TriggerClassifier");
-		MaxEntDecoder argClassifier = new MaxEntDecoder(new File(args[1]), "ArgClassifier");
-		
+		MaxEntDecoder triggerClassifier = new MaxEntDecoder(new File(args[0]),
+				"TriggerClassifier");
+		MaxEntDecoder argClassifier = new MaxEntDecoder(new File(args[1]),
+				"ArgClassifier");
+
 		// Perceptron read model from the serialized file		
 		File srcDir = new File(args[2]);
 		File fileList = new File(args[3]);
 		File outDir = new File(args[4]);
-		if(!outDir.exists())
+		if (!outDir.exists())
 		{
 			outDir.mkdirs();
 		}
-		
+
 		BufferedReader reader = new BufferedReader(new FileReader(fileList));
 		String line = "";
 		TextFeatureGenerator featGen = new TextFeatureGenerator();
 		// decode for each document
-		while((line = reader.readLine()) != null)
+		while ((line = reader.readLine()) != null)
 		{
 			List<SentenceInstance> localInstanceList = null;
 			boolean monoCase = line.contains("bn/") ? true : false;
 			String fileName = srcDir + File.separator + line;
 			System.out.println(fileName);
 			Document doc = null;
-			
+
 			doc = new Document(fileName, true, monoCase);
 			// fill in text feature vector for each token
 			featGen.fillTextFeatures(doc);
-			
+
 			Alphabets alphabets = new Alphabets();
 			Controller controller = new Controller();
-			
-			localInstanceList = doc.getInstanceList(alphabets, 
-					controller, true);
-			
+
+			localInstanceList = doc
+					.getInstanceList(alphabets, controller, true);
+
 			// docoding
-			List<SentenceAssignment> localResults = decoding(localInstanceList, triggerClassifier, argClassifier);
-			
+			List<SentenceAssignment> localResults = decoding(localInstanceList,
+					triggerClassifier, argClassifier);
+
 			// print to docs
 			File outputFile = new File(outDir + File.separator + line);
-			if(!outputFile.getParentFile().exists())
+			if (!outputFile.getParentFile().exists())
 			{
 				outputFile.getParentFile().mkdirs();
 			}
-			String docID = doc.docID.substring(doc.docID.lastIndexOf(File.separator) + 1);
+			String docID = doc.docID.substring(doc.docID
+					.lastIndexOf(File.separator) + 1);
 			String id_prefix = docID + "-" + "EV";
 			PrintWriter out = new PrintWriter(outputFile);
-			
+
 			// output entities and predicted events from doc
 			List<AceEvent> eventsInDoc = new ArrayList<AceEvent>();
-			
-			for(int inst_id=0; inst_id<localInstanceList.size(); inst_id++)
+
+			for (int inst_id = 0; inst_id < localInstanceList.size(); inst_id++)
 			{
 				SentenceAssignment assn = localResults.get(inst_id);
 				SentenceInstance inst = localInstanceList.get(inst_id);
@@ -162,10 +185,11 @@ public class Decoder extends event.perceptron.core.Decoder
 			writeEntities(out, doc.getAceAnnotations(), eventsInDoc);
 			out.close();
 		}
-		
+
 		// get score
 		File outputFile = new File(outDir + File.separator + "Score");
-		EventScorer.main(new String[]{args[2], args[4], args[3], outputFile.getAbsolutePath()});
+		EventScorer.main(new String[] { args[2], args[4], args[3],
+				outputFile.getAbsolutePath() });
 	}
 
 }

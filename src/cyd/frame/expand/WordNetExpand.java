@@ -1,10 +1,10 @@
-package cyd.expand;
+package cyd.frame.expand;
 
 import java.io.*;
 import java.util.*;
 
 import util.WordNetWrapper;
-import cyd.TMP;
+import cyd.frame.TMP;
 import cyd.util.StopWord;
 
 public class WordNetExpand
@@ -79,7 +79,7 @@ public class WordNetExpand
 			{
 				if (trigger_set.contains(strs[i]) == true)
 				{
-					System.out.println(strs[0] +" : "+ strs[i]);
+					System.out.println(strs[0] + " : " + strs[i]);
 					++child;
 				}
 				++parent;
@@ -186,15 +186,26 @@ public class WordNetExpand
 
 		String train_trigger_feat_path = "./cyd/wordnet_expand/feat_train.txt";
 
-		wordnet_expand_recall_cnt(in_train_path, not_in_train_path);
+		//		wordnet_expand_recall_cnt(in_train_path, not_in_train_path);
 
-		//		wordnet_expand(train_filelist_path, dir_path, in_train_path,
-		//				train_trigger_feat_path);
-		//
-		//		String test_trigger_feat_path = "./cyd/wordnet_expand/feat_test.txt";
-		//
-		//		wordnet_expand(test_filelist_path, dir_path, in_train_path,
-		//				test_trigger_feat_path);
+//		wordnet_expand(train_filelist_path, dir_path, in_train_path,
+//				train_trigger_feat_path);
+
+		String test_trigger_feat_path = "./cyd/wordnet_expand/feat_test.txt";
+
+//		wordnet_expand(test_filelist_path, dir_path, in_train_path,
+//				test_trigger_feat_path);
+		
+		List<String> synonyms = WordNetWrapper.getSingleTon()
+				.getSynonyms("move", "VB");
+		if (synonyms != null)
+		{
+			for (String str : synonyms)
+			{
+				System.out.println(str);
+			}
+		}
+		
 		System.exit(0);
 	}
 }

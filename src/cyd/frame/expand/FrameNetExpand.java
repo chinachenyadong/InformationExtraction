@@ -1,11 +1,11 @@
-package cyd.expand;
+package cyd.frame.expand;
 
 import java.io.*;
 import java.util.*;
 import org.dom4j.*;
 import org.dom4j.io.*;
 
-import cyd.TMP;
+import cyd.frame.TMP;
 import cyd.util.*;
 
 public class FrameNetExpand
@@ -103,7 +103,7 @@ public class FrameNetExpand
 						String b_pos = b.substring(b.lastIndexOf(".") + 1);
 						if (b_pos.equals(a_pos))
 						{
-							double sc = cyd.sim.Similarity.getSingleton()
+							double sc = cyd.frame.sim.Similarity.getSingleton()
 									.get_sim(a_word, b_word, a_pos);
 							sum += sc;
 						}
@@ -738,7 +738,7 @@ public class FrameNetExpand
 //		cover_unknown(not_in_train_path, event_frame_map_path, frame_lu_path, 5);
 		
 		// 与上述区别在于，将所有扩展后的lu放入trigger_set，然后判断未登录，而非对每种类型判断未登录
-		cover_unknown_lus(not_in_train_path, event_frame_map_path, frame_lu_path, 5);
+//		cover_unknown_lus(not_in_train_path, event_frame_map_path, frame_lu_path, 5);
 
 		String dir_path = "./tmp/featDir/";
 		String train_filelist_path = "./cyd/filelist/new_filelist_ACE_training";
@@ -747,16 +747,16 @@ public class FrameNetExpand
 		//		feat_only_train_lu(train_filelist_path, dir_path, in_train_path, 
 		//				train_trigger_feat_path);
 
-		//		feat_only_train_lu_framenet(train_filelist_path, dir_path,
-		//				in_train_path, train_trigger_feat_path, event_frame_map_path,
-		//				frame_lu_path, 5);
+				feat_only_train_lu_framenet(train_filelist_path, dir_path,
+						in_train_path, train_trigger_feat_path, event_frame_map_path,
+						frame_lu_path, 5);
 
 		String test_filelist_path = "./cyd/filelist/new_filelist_ACE_test";
 		String test_trigger_feat_path = "./cyd/only_trigger_feat/test_feat_only_train_lu.txt";
 
-		//		feat_only_train_lu_framenet(test_filelist_path, dir_path,
-		//				in_train_path, test_trigger_feat_path, event_frame_map_path,
-		//				frame_lu_path, 5);
+				feat_only_train_lu_framenet(test_filelist_path, dir_path,
+						in_train_path, test_trigger_feat_path, event_frame_map_path,
+						frame_lu_path, 5);
 
 		System.exit(0);
 	}

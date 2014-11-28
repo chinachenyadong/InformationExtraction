@@ -73,7 +73,7 @@ public class MeTrainer
 		
 		long startTime = System.currentTimeMillis();
 		// train a Maxent classifier (could be other classifiers)
-		ClassifierTrainer trainer = new MaxEntTrainer(1.0);
+		ClassifierTrainer trainer = new MaxEntTrainer(0.9);
 		Classifier classifier = trainer.train(trainingInstances);
 		// calculate running time
 		long endTime = System.currentTimeMillis();
@@ -129,15 +129,21 @@ public class MeTrainer
 		fw.close();
 	}
 	
+	public static void printFeatureWeights(MaxEnt maxEnt, PrintStream out)
+	{
+		maxEnt.print(out);
+	}
+	
 	public static void main(String[] args) throws IOException
 	{
 		String trainFilelist = "./cyd/filelist/new_filelist_ACE_training";
 		String featDir = "./tmp/featDir/";
-		String feat_path = "./cyd/trigger_train_feature";
-		feature_table(trainFilelist, featDir, feat_path);
+//		String feat_path = "./cyd/trigger_train_feature";
+//		feature_table(trainFilelist, featDir, feat_path);
 	
 //		String feat_path = "./cyd/only_trigger_feat/train_feat_only_train_lu.txt";
 //		String feat_path = "./cyd/wordnet_expand/feat_train.txt";
+		String feat_path = "./cyd/train_feature_path.txt";
 		String modelPath = "./cyd/model";
 		TrainMaxent(feat_path, modelPath);
 	}

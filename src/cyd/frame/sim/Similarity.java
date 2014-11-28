@@ -1,4 +1,4 @@
-package cyd.sim;
+package cyd.frame.sim;
 
 import java.io.*;
 import java.util.*;

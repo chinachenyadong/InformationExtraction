@@ -24,5 +24,9 @@
 	<classpathentry kind="lib" path="lib/stanford-corenlp-2012-07-09.jar"/>
 	<classpathentry kind="lib" path="lib/trove-3.0.3.jar"/>
 	<classpathentry kind="lib" path="F:/code/EclipseWorkspace/EventExtraction/lib/commons-io-2.4.jar"/>
+	<classpathentry kind="lib" path="F:/code/EclipseWorkspace/WordNetSimilarity/lib/edu.mit.jwi_2.1.4.jar"/>
+	<classpathentry kind="lib" path="F:/code/EclipseWorkspace/WordNetSimilarity/lib/edu.mit.jwi_2.3.3.jar"/>
+	<classpathentry kind="lib" path="F:/code/EclipseWorkspace/WordNetSimilarity/lib/edu.sussex.nlp.jws.beta.11.jar"/>
+	<classpathentry kind="lib" path="F:/code/EclipseWorkspace/EventExtraction/lib/JNI_SVM-light-6.01-64bit/lib/jnisvmlight.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

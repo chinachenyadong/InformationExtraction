@@ -1,4 +1,4 @@
-package cyd;
+package cyd.frame;
 
 import java.io.*;
 import java.util.*;
@@ -91,17 +91,16 @@ public class ForwardAlgorithm
 		answer_label.add("Lem");
 
 		int before_size = 0;
+		
+		double max_f = 0;
+		String max_label = null;
+		PRF max_prf = new PRF();
 		do
 		{
 			before_size = answer_label.size();
-
-			double max_f = 0;
-			String max_label = null;
-			PRF max_prf = new PRF();
-
 			for (String label : label_set)
 			{
-				if (answer_label.contains(label))
+				if (answer_label.contains(label) == false)
 				{
 					continue;
 				}
@@ -146,13 +145,17 @@ public class ForwardAlgorithm
 						+ prf_result.r + " : " + prf_result.f);
 			}
 
-			answer_label.add(max_label);
+			if (max_label != null)
+			{
+				answer_label.add(max_label);
+			}
 			for (String label : answer_label)
 			{
 				fw.write(label + " ");
 			}
 			fw.write(max_prf.p + " " + max_prf.r + " " + max_prf.f + "\n");
-
+			
+			break;
 		} while (before_size != answer_label.size());
 
 		fw.close();

@@ -1,10 +1,10 @@
-package cyd.prf;
+package cyd.frame.prf;
 
 import java.io.*;
 import java.util.*;
 
 import util.WordNetWrapper;
-import cyd.TMP;
+import cyd.frame.TMP;
 import cyd.util.StopWord;
 
 public class UnknowTriggerPrf

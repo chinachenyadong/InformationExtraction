@@ -124,4 +124,5 @@ public class ArgumentClassifierTraining extends TriggerClassifierTraining
 		printFeatureWeights((MaxEnt) model, out);
 		out.close();
 	}
+	
 }

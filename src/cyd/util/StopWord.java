@@ -31,7 +31,7 @@ public class StopWord
 		br.close();
 	}
 	
-	public static boolean is_stopword(String word) throws Exception
+	public boolean is_stopword(String word) throws Exception
 	{
 		if (stopword_set.contains(word))
 		{
